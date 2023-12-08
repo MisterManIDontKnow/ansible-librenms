@@ -1,0 +1,11 @@
+---
+# vars file for librenms
+ansible_hostname: <enter hostname here>  # This needs an appropriate value entered.
+http_fping: "http_fping.j2"
+latest_release: "librenms-YY.M.R.tar.gz" # This needs an appropriate value entered.
+mariadb_cnf: "latest_mariadb.cnf.j2"
+mysql_root_cnf: "root_cnf.j2"
+nginx_conf: "nginx_conf.j2"
+nginx_librenms_conf: "nginx_librenms.conf.j2"
+php_fpm_librenms-conf: "php-fpm_librenms.conf.j2"
+snmpd_conf: "snmpd.conf.j2"
