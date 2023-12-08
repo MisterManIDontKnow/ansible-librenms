@@ -1,0 +1,28 @@
+---
+- name: Add LibreNMS group.
+  ansible.builtin.group:
+    name: librenms
+    state: present
+    gid: "{{ LIBRENMS_GROUP_ID }}"
+
+- name: Add LibreNMS user.
+  ansible.builtin.user:
+    name: librenms
+    system: true
+    home: "/opt/librenms"
+    append: true
+    groups: librenms
+    create_home: false
+    shell: "/usr/bin/bash" # or whatever your preferred flavor of shell is
+    state: present
+    password: "{{ LIBRENMS_USER_PASSWORD }}"
+
+- name: Configure sudoers file. # This is untested
+  community.general.sudoers:
+  commands: ALL
+  name: librenms
+  nopassword: true
+  state: present
+  sudoers_path: "/etc/sudoers.d"
+  user: librenms
+  
