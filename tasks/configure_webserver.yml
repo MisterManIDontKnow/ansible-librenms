@@ -1,0 +1,37 @@
+- name: Configure PHP-FPM.
+  ansible.builtin.template:
+    backup: true
+    src: "templates/{{ php_fpm_librenms_conf }}"
+    dest: "/etc/php-fpm.d/librenms.conf"
+
+- name: Clean up www. # Will want this to not run if using server for more than just LibreNMS.
+  ansible.builtin.file:
+    path: "/etc/php-fpm.d/www.conf"
+    state: absent
+
+- name: Configure Web Server file 1.
+  ansible.builtin.template:
+    backup: true
+    src: "templates/{{ nginx_librenms_conf }}"
+    dest: "/etc/nginx/conf.d/librenms.conf"
+
+- name: Configure Web Server file 2.
+  ansible.builtin.template:
+    backup: true
+    src: "templates/{{ nginx_conf }}"
+    dest: "/etc/nginx/nginx.conf"
+
+- name: Disable the default site.
+  ansible.builtin.file:
+    path: "/etc/nginx/sites-available/"
+    state: absent
+
+- name: Enable nginx and php-fpm services.
+  ansible.builtin.service:
+    name: "{{ item }}"
+    enabled: true
+    state: started
+  with_items:
+    - nginx
+    - php-fpm
+    
