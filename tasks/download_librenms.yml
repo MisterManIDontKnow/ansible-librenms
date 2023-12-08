@@ -1,0 +1,53 @@
+---
+- name: Download LibreNMS.
+  ansible.posix.synchronize:
+    src: "/opt/librenms/"
+    dest: "/opt/librenms"
+    archive: true
+    compress: true
+    mode: push
+    verify_host: false
+    set_remote_user: true
+    private_key: "{{ install_path }}/files/id_rsa"
+  delegate_to: "{{ old_librenms }}"
+  remote_user: librenms
+  become: false
+  tags: upgrade
+
+- name: Download LibreNMS.
+  ansible.posix.synchronise:
+    src: "{{ install_path }}/files/releases/latest/{{ latest_release }}"
+    dest: "/opt/"
+    archive: true
+    compress: true
+    mode: push
+    verify-host: false
+  tags: install
+
+- name: Extract file
+  ansible.builtin.unarchive:
+    src: "/opt/{{ latest_release }}"
+    dest: "/opt/"
+    remote-src: true
+  tags: install
+
+- name: Rename file
+  ansible.builtin.copy:
+    src: "/opt/{{ latest_release | regex_replace('.tar.gz$') }}/"
+    dest: "/opt/{{ latest_release | regex_replace('.tar.gz$') | regex_replace('-.*(.*)$') }}/"
+    remote_src: true
+    mode: 0755
+  tags: install
+
+- name: Cleanup tar file
+  ansible.builtin.file:
+    state: absent
+    path: "/opt/{{ latest_release }}"
+  tags: install
+
+- name: Cleanup extracted files
+  ansible.builtin.file:
+    state: absent
+    path: "/opt/{{ latest_release | regex_replace('.tar.gz$') }}"
+  tags: install
+  
