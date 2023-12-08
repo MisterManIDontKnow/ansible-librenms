@@ -3,6 +3,7 @@
 ansible_hostname: <enter hostname here>  # This needs an appropriate value entered.
 http_fping: "http_fping.j2"
 latest_release: "librenms-YY.M.R.tar.gz" # This needs an appropriate value entered.
+LIBRENMS_GROUP_ID: "####" # This needs an appropriate value entered.
 mariadb_cnf: "latest_mariadb.cnf.j2"
 mysql_root_cnf: "root_cnf.j2"
 nginx_conf: "nginx_conf.j2"
