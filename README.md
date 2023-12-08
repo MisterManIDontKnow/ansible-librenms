@@ -9,3 +9,4 @@ Requires:
 - Updating the vars/main.yml with the appropriate values for variables:
   1. ansible_hostname
   2. latest_release
+  3. LIBRENMS_GROUP_ID
