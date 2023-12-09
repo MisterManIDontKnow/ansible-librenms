@@ -1,0 +1,12 @@
+- name: Configure snmp step 1.
+  ansible.builtin.template:
+    backup: true
+    src: "templates/{{ snmpd_conf }}"
+    dest: "/etc/snmp/snmpd.conf"
+
+- name: Configure snmp step 2.
+  ansible.builtin.service:
+    name: snmpd
+    enabled: true
+    state: restarted
+    

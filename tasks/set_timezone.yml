@@ -1,0 +1,11 @@
+- name: Set Timezone step 1.
+  ansible.builtin.replace:
+    path: "/etc/php.ini"
+    regexp: '^date.timezone[ \t]*='
+    replace: 'date.timezone = Etc/UTC'
+
+- name: Set Timezone step 2.
+  community.general timezone:
+    hwclock: UTC
+    name: Etc/UTC
+    

@@ -1,0 +1,12 @@
+- name: Enable lnms command completion step 1.
+  ansible.builtin.file:
+    state: link
+    src: "/opt/librenms/lnms"
+    dest: "/usr/bin/lnms"
+
+- name: Enable lnms command completion step 2.
+  ansible.builtin.copy:
+    src: "/opt/librenms/misc/lnms-completion.bash"
+    dest: "/etc/bash-completion.d/"
+    remote_src: true
+    

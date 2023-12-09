@@ -1,0 +1,16 @@
+---
+- hosts: librenms
+  roles:
+    -  librenms
+  vars_prompt:
+    - name: old_librenms
+      prompt: "What is the old hostname's Fully Qualified Domain Name?"
+      private: false
+  vars:
+      - role_: "librenms"
+      - install_path: "/path/to/ansible/roles/{{ role_ }}"
+  vars_files:
+      - "{{ install_path }}/vars/main.yml"
+      - "{{ install_path }}/vars/vault.yml"
+      - "{{ install_path }}/vars/vars.yml"
+      

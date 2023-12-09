@@ -1,0 +1,54 @@
+- name: Install repos if greater than or equal to distribution version # Example, it could be CentOS 6, or Fedora 8, or Rocky, etc...
+  ansible.builtin.dnf:
+    name:
+      - epel-release
+      - dnf-utils
+      - php
+    state: present
+  when: "(ansible_facts['distribution'] == \"{{ distribution_name }}\" and ansible_facts['distribution_major_version'] >= \"{{ distribution_min_version }}\")"
+
+- name: Reset PHP module.
+  ansible.builtin.command:
+    cmd: "dnf -y module reset php"
+
+- name: Enable PHP module to appropriate version. # Modify version as necessary.
+  ansible.builtin.command:
+    cmd: "dnf -y module enable php:{{ php_version }}"
+
+- name: install necessary packages.
+  ansible.builtin.dnf:
+    name:
+      - bash-completion
+      - cronie
+      - fping
+      - Imagemagick
+      - mariadb-server
+      - mtr
+      - net-snmp
+      - net-snmp-utils
+      - nginx
+      - nmap
+      - php-cli
+      - php-common
+      - php-curl
+      - php-gd
+      - php-gmp
+      - php-json
+      - php-mbstring
+      - php-pear # For weathermap plugin
+      - php-process
+      - php-snmp
+      - php-xml
+      - php-zip
+      - php-mysqlnd
+      - python3
+      - python3-PyMySQL
+      - python3-redis
+      - python3-memcached
+      - python3-pip
+      - python3-systemd
+      - rsync
+      - rrdtool
+      - unzip
+    state: present
+    

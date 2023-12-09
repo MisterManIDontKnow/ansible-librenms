@@ -1,0 +1,39 @@
+- name: Set permissions step 1.
+  ansible.builtin.file:
+    path: "/opt/librenms"
+    owner: librenms
+    group: librenms
+    recurse: true
+    state: directory
+
+- name: Set permissions step 2.
+  ansible.builtin.file:
+    path: "/opt/librenms"
+    mode: 771
+
+- name: Set permissions step 3.
+  ansible.posix.acl:
+    state: present
+    path: "{{ item }}"
+    default: true
+    etype: group
+    permissions: rwx
+  with_items:
+    - /opt/librenms/rrd
+    - /opt/librenms/logs
+    - /opt/librenms/bootstrap/cache/
+    - /opt/librenms/storage/
+
+- name: Set permissions step 4.
+  ansible.posix.acl:
+    state: present
+    path: "{{ item }}"
+    recursive: true
+    etype: group
+    permissions: rwx
+  with_items:
+    - "/opt/librenms/rrd"
+    - "/opt/librenms/logs"
+    - "/opt/librenms/bootstrap/cache/"
+    - "/opt/librenms/storage/"
+    
