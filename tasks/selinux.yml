@@ -1,0 +1,66 @@
+- name: SELinux Install Dependency.
+  ansible.builtin.dnf:
+    name: policycoreutils-python-utils
+    state: present
+
+- name: SELinux - fcontext 1.
+  community.general.sefcontext:
+    target: '/opt/librenms/html(/.*)?'
+    setype: httpd_sys_content_t
+    state: present
+    
+- name: SELinux - fcontext 2.
+  community.general.sefcontext:
+    target: '/opt/librenms/(rrd|storage)(/.*)?'
+    setype: httpd_sys_rw_content_t
+    state: present
+
+- name: SELinux - fcontext 3.
+  community.general.sefcontext:
+    target: '/opt/librenms/logs(/.*)?'
+    setype: httpd_log_t
+    state: present
+
+- name: SELinux - fcontext 4.
+  community.general.sefcontext:
+    target: '/opt/librenms/librenms-service.py'
+    setype: bin_t
+    state: present
+
+- name: SELinux apply the new file contexts to filesystem.
+  ansible.builtin.command:
+    cmd: restorecon -RFvv /opt/librenms
+
+- name: SELinux set boolean 1.
+  ansible.posix.seboolean:
+    name: httpd_can_sendmail
+    state: true
+    persistent: true
+
+- name: SELinux set boolean 2.
+  ansible.posix.seboolean:
+    name: httpd_execmem
+    state: true
+    persistent: true
+
+- name: SELinux chcon.
+  ansible.builtin.command:
+    cmd: chcon -t httpd_sys_rw_content_t /opt/librenms/.env
+
+- name: Create fping file.
+  ansible.builtin.template:
+    src: "templates/{{ http_fping }}"
+    dest: "/opt/librenms/http-fping.tt"
+
+- name: SELinux checkmodule.
+  ansible.builtin.command:
+    cmd: checkmodule -M -m -o /opt/librenms/http_fping.mod /opt/librenms/http_fping.tt
+
+- name: SELinux semodule_package.
+  ansible.builtin.command:
+    cmd: semodule_package -o http_fping.pp -m /opt/librenms/http_fping.mod
+
+- name: SELinux semodule.
+  ansible.builtin.command:
+    cmd: semodule -i http_fping.pp
+    
