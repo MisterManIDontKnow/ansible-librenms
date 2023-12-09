@@ -1,6 +1,8 @@
 ---
 # vars file for librenms
 ansible_hostname: <enter hostname here>  # This needs an appropriate value entered.
+distribution_min_version: "6" # Replace with minimum distribution version that may work, as needed.
+distribution_name: "RedHat" # Example, replace with distribution name. gathering ansible_facts may help here.
 http_fping: "http_fping.j2"
 latest_release: "librenms-YY.M.R.tar.gz" # This needs an appropriate value entered.
 LIBRENMS_GROUP_ID: "####" # This needs an appropriate value entered.
