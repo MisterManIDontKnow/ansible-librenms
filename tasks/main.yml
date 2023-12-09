@@ -1,0 +1,52 @@
+---
+- name: Install repos
+  import_tasks: "{{ install_path }}/tasks/install_repos.yml"
+
+- name: Configure librenms user and group
+  import_tasks: "{{ install_path }}/tasks/configure_user.yml"
+
+- name: Download LibreNMS
+  import_tasks: "{{ install_path }}/tasks/download_librenms.yml"
+
+- name: Set permissions
+  import_tasks: "{{ install_path }}/tasks/set_permissions.yml"
+
+- name: Set Timezone
+  import_tasks: "{{ install_path }}/tasks/set_timezone.yml"
+
+- name: Configure MariaDB
+  import_tasks: "{{ install_path }}/tasks/configure_mariadb.yml"
+
+- name: Configure web server
+  import_tasks: "{{ install_path }}/tasks/configure_webserver.yml"
+
+- name: SELinux configuration
+  import_tasks: "{{ install_path }}/tasks/selinux.yml"
+
+- name: Allow access through firewall.
+  ansible.posix.firewalld:
+    state: enabled
+    service: "{{ item }}"
+    permanent: true
+    zone: public
+  with_items:
+    - http
+    - https
+
+- name: lnms command completion
+  import_tasks: "{{ install_path }}/tasks/command_completion.yml"
+
+- name: Configure snmp
+  import_tasks: "{{ install_path }}/tasks/configure_snmp.yml"
+
+- name: Cron job setup.
+  ansible.builtin.copy:
+    src: "/opt/librenms/librenms.nonroot.cron"
+    dest: "/etc/cron.d/librenms"
+    remote_src: true
+    
+- name: Copy logrotate config.
+  ansible.builtin.copy:
+    src: "/opt/librenms/misc/librenms.logrotate"
+    dest: "/etc/logrotate.d/librenms"
+    remote_src: true
