@@ -18,3 +18,9 @@ Requires:
   3. **LIBRENMS_GROUP_ID**
   4. **distribution_min_version**
   5. **distribution_name**
+
+- Ansible collections:
+  1. ansible.builtin
+  2. ansible.posix
+  3. community.general
+  4. community.mysql
