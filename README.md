@@ -16,3 +16,5 @@ Requires:
   1. **ansible_hostname**
   2. **latest_release** This is used only if using the install tag
   3. **LIBRENMS_GROUP_ID**
+  4. **distribution_min_version**
+  5. **distribution_name**
